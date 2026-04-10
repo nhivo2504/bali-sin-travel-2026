@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expedition: Bali - Singapore</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&display=swap"
+    rel="stylesheet">
+
+  <!-- Chosen Palette: Warm Neutrals & Earth Tones (Off-white background, Terracotta accents, Charcoal text, Soft Sand sections) -->
+  <!-- Application Structure Plan: The SPA is structured as a narrative dashboard to maximize engagement and filter compatible travel mates. It opens with an impactful Hero section establishing the tone. The 'Overview' uses an intuitive card list to quickly communicate the trip's hard constraints (time, pax, transport). The 'Vibe Check' uses an interactive two-column layout for easy self-assessment. The 'Blueprint' has been REDESIGNED into a highly visual chronological timeline and 'Vibe Cards' to reduce text density and increase inspiration. A tempo/energy line chart visualizes the contrast in daily pacing. Finally, the 'Finance' and 'Action' sections provide clear, structured next steps. -->
+  <!-- Visualization & Content Choices: 
+         1. Report Info: Overall Trip Profile -> Goal: Inform -> Viz: Info Cards -> Interaction: Hover effects -> Justification: Direct keywords (8 days, 4 pax, car/motorbike) are faster to parse for initial screening. Method: HTML/Tailwind. NO SVG.
+         2. Report Info: Itinerary Flow & Vegetation -> Goal: Timeline/Organization -> Viz: Proportional CSS Segmented Bar -> Interaction: Click to select station -> Justification: Visually maps the chronological journey and uses background colors/emojis to represent the 'vibe/vegetation' of each stop (Forest -> Rice fields -> Ocean -> Club -> City), replacing the static list. Method: HTML/Tailwind + Vanilla JS. NO SVG.
+         3. Report Info: Daily Details -> Goal: Inform/Inspire -> Viz: Dynamic Vibe Cards -> Interaction: Updates via Timeline clicks -> Justification: Reduces text density. Uses gradients and punchy bullet points to convey the emotional tone and logistics simultaneously. Method: HTML/Tailwind + JS DOM updates.
+         4. Report Info: Trip Pacing -> Goal: Trend/Change -> Viz: Line Chart (Tempo/Energy) -> Interaction: Hover for details, dynamic point highlighting -> Justification: Replaces the Donut chart to show how the trip's intensity fluctuates over time (relaxing in Sidemen, intense in Singapore), adding a deep analytical layer to the 'vibe'. Method: Chart.js. NO SVG. -->
+  <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FDFBF7;
+      color: #2C302E;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    .font-serif {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin-left: auto;
+      margin-right: auto;
+      height: 250px;
+      max-height: 300px;
+    }
+
+    @media (min-width: 768px) {
+      .chart-container {
+        height: 280px;
+      }
+    }
+
+    .nav-link {
+      transition: color 0.3s ease;
+      color: #59605D;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: #C17767;
+      font-weight: 600;
+    }
+
+    .btn-primary {
+      background-color: #C17767;
+      color: #FFFFFF;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #A66050;
+      transform: translateY(-2px);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.4s ease-out forwards;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .unicode-icon {
+      font-family: "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    }
+
+    /* Timeline UI Styles */
+    .timeline-segment {
+      transition: all 0.3s ease;
+      filter: grayscale(40%);
+      opacity: 0.8;
+      cursor: pointer;
+    }
+
+    .timeline-segment:hover {
+      filter: grayscale(0%);
+      opacity: 1;
+      transform: scaleY(1.05);
+    }
+
+    .timeline-segment.active {
+      filter: grayscale(0%);
+      opacity: 1;
+      transform: scaleY(1.1);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      border: 2px solid white;
+    }
+
+    /* Dynamic Vibe Backgrounds */
+    .vibe-ubud {
+      background: linear-gradient(135deg, #2E4C38, #4A6741);
+      color: white;
+    }
+
+    /* Forest Green */
+    .vibe-sidemen {
+      background: linear-gradient(135deg, #7E8D5C, #A3B18A);
+      color: #1A1F16;
+    }
+
+    /* Soft Olive/Rice Terrace */
+    .vibe-lembongan {
+      background: linear-gradient(135deg, #1A5F7A, #22A39F);
+      color: white;
+    }
+
+    /* Deep Ocean to Aqua */
+    .vibe-seminyak {
+      background: linear-gradient(135deg, #2D1B2E, #512B58);
+      color: white;
+    }
+
+    /* Nightlife Dark Purple */
+    .vibe-singapore {
+      background: linear-gradient(135deg, #393E46, #7A869A);
+      color: white;
+    }
+
+    /* Urban Slate Gray */
+  </style>
+</head>
+
+<body class="antialiased">
+
+  <nav class="fixed w-full z-50 bg-[#FDFBF7]/90 backdrop-blur-md border-b border-[#E5E0D8]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <div class="flex-shrink-0 font-serif text-xl font-bold text-[#C17767]">
+          T&N.2026
+        </div>
+        <div class="hidden md:flex space-x-8">
+          <a href="#hero" class="nav-link text-sm">Tổng quan</a>
+          <a href="#vibe" class="nav-link text-sm">Vibe Check</a>
+          <a href="#blueprint" class="nav-link text-sm">Hành trình</a>
+          <a href="#finance" class="nav-link text-sm">Vận hành</a>
+          <a href="#connect" class="nav-link text-sm">Kết nối</a>
+        </div>
+        <div class="md:hidden flex items-center text-[#C17767] font-bold">
+          &#9776;
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <section id="hero"
+    class="pt-32 pb-20 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <div class="md:w-1/2 space-y-6">
+      <div
+        class="inline-block px-3 py-1 bg-[#E5DCC5] text-[#8C6D46] rounded-full text-xs font-bold tracking-widest uppercase">
+        Hello Travel Mates!
+      </div>
+      <h1 class="text-5xl md:text-6xl font-bold leading-tight text-[#2C302E]">
+        Bali & Singapore<br>
+        <span class="text-[#C17767] italic">Nguyên bản & Đương đại</span>
+      </h1>
+      <p class="text-lg text-[#59605D] leading-relaxed">
+        Một hành trình thiết kế riêng cho những tâm hồn tự do: Lẩn khuất trong ngõ hẻm Ubud, snorkel ở Lembongan/Penida
+        và chill cùng âm nhạc bản địa. Không resort hào nhoáng, không check-in rập khuôn.
+      </p>
+      <div class="flex gap-4 pt-4">
+        <a href="#vibe" class="btn-primary px-8 py-3 rounded-md font-medium shadow-lg">Kiểm tra độ hợp cạ</a>
+        <a href="#blueprint"
+          class="px-8 py-3 rounded-md font-medium border border-[#C17767] text-[#C17767] hover:bg-[#F3EFE6] transition duration-300">Xem
+          Hành trình</a>
+      </div>
+    </div>
+
+    <div class="md:w-1/2 w-full bg-[#F3EFE6] rounded-2xl p-8 shadow-inner relative flex flex-col justify-center h-full">
+      <p class="text-sm font-semibold text-[#8C6D46] mb-6 text-center uppercase tracking-wider">Highlights</p>
+
+      <div class="space-y-4">
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-[#E5E0D8] flex items-center gap-4 transition hover:shadow-md hover:-translate-y-1 duration-300">
+          <div
+            class="w-12 h-12 flex-shrink-0 bg-[#F9F7F3] rounded-full flex items-center justify-center text-2xl unicode-icon text-[#8C6D46]">
+            ⏳</div>
+          <div>
+            <h4 class="font-bold text-[#2C302E] text-lg">8D7N</h4>
+            <p class="text-sm text-[#59605D]">Từ 25/04/2026 đến 02/05/2026</p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-[#E5E0D8] flex items-center gap-4 transition hover:shadow-md hover:-translate-y-1 duration-300">
+          <div
+            class="w-12 h-12 flex-shrink-0 bg-[#F9F7F3] rounded-full flex items-center justify-center text-2xl unicode-icon text-[#8C6D46]">
+            👥</div>
+          <div>
+            <h4 class="font-bold text-[#2C302E] text-lg">Lý tưởng Nhóm 4 Người</h4>
+            <p class="text-sm text-[#59605D]">Đã có 2 nữ. Cần tìm thêm 1-2 bạn đồng hành.</p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-[#E5E0D8] flex items-center gap-4 transition hover:shadow-md hover:-translate-y-1 duration-300">
+          <div
+            class="w-12 h-12 flex-shrink-0 bg-[#F9F7F3] rounded-full flex items-center justify-center text-2xl unicode-icon text-[#8C6D46]">
+            🛵</div>
+          <div>
+            <h4 class="font-bold text-[#2C302E] text-lg">Di chuyển Linh hoạt</h4>
+            <p class="text-sm text-[#59605D]">Ô tô cho chặng dài & Xe máy tự lái luồn lách ngõ hẻm.</p>
+          </div>
+        </div>
+
+        <div
+          class="bg-white p-4 rounded-xl shadow-sm border border-[#E5E0D8] flex items-center gap-4 transition hover:shadow-md hover:-translate-y-1 duration-300">
+          <div
+            class="w-12 h-12 flex-shrink-0 bg-[#F9F7F3] rounded-full flex items-center justify-center text-2xl unicode-icon text-[#8C6D46]">
+            ✨</div>
+          <div>
+            <h4 class="font-bold text-[#2C302E] text-lg">Vibe Chuyến đi</h4>
+            <p class="text-sm text-[#59605D]">Văn hóa bản địa - Ẩm thực địa phương - Nightlife đương đại.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vibe" class="py-24 bg-[#F9F7F3] border-y border-[#E5E0D8]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-12 md:w-2/3">
+        <h2 class="text-4xl font-serif text-[#2C302E] mb-4">"Vibe Check" - Tìm kiếm sự đồng điệu</h2>
+        <p class="text-[#59605D] leading-relaxed">
+          Phần này giúp chúng ta xác định sự tương thích về phong cách du lịch. Chuyến đi nhóm chỉ thành công khi các
+          thành viên chia sẻ chung một hệ giá trị trải nghiệm, từ cách đóng gói hành lý đến cách tận hưởng một đêm tại
+          thành phố lạ.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="bg-white p-8 rounded-xl border-t-4 border-[#88B04B] shadow-sm">
+          <h3 class="text-xl font-bold mb-6 flex items-center text-[#88B04B]">
+            <span class="unicode-icon text-2xl mr-2">&#x2714;</span> TUYỆT VỜI NẾU BẠN THÍCH:
+          </h3>
+          <ul class="space-y-5 text-sm text-[#59605D] leading-relaxed">
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🎒</span>
+              <span><strong class="text-[#2C302E]">Hành trang tinh gọn:</strong> Trải nghiệm 8 ngày chỉ với 1 vali xách
+                tay Size S hoặc Balo để linh hoạt di chuyển lên xuống tàu xe.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🌶️</span>
+              <span><strong class="text-[#2C302E]">Đam mê ăn uống:</strong> Thích la cà các Warung địa phương, tìm kiếm
+                hương vị gốc đậm đà, và săn tìm ẩm thực & Michelin đường phố.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🎨</span>
+              <span><strong class="text-[#2C302E]">Nghệ thuật & Văn hóa:</strong> Dành thời gian tại các local stores,
+                coffee, khám phá spiritual life của người dân Bali.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🛵</span>
+              <span><strong class="text-[#2C302E]">Giao thoa Đời sống:</strong> Khám phá nhịp sống địa phương, âm nhạc
+                bản địa, ưu tiên chiều sâu trải nghiệm thực tế thay vì chỉ chụp ảnh check-in.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🤝</span>
+              <span><strong class="text-[#2C302E]">Tự do & Chia sẻ:</strong> Tôn trọng tự do cá nhân, nhưng luôn cởi mở
+                san sẻ các chuyến di chuyển lớn hoặc cùng nhau thử nhiều món ăn.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">📸</span>
+              <span><strong class="text-[#2C302E]">Moments Capture:</strong> Trân trọng việc lưu giữ kỷ niệm nhưng ưu
+                tiên tận hưởng không gian hiện tại hơn là chụp ảnh hàng giờ.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-8 rounded-xl border-t-4 border-[#C17767] shadow-sm h-fit">
+          <h3 class="text-xl font-bold mb-6 flex items-center text-[#C17767]">
+            <span class="unicode-icon text-2xl mr-2">&#x2716;</span> CÓ THỂ LỆCH TẦN SỐ NẾU:
+          </h3>
+          <ul class="space-y-5 text-sm text-[#59605D] leading-relaxed">
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">🧳</span>
+              <span>Bạn cần mang theo nhiều hành lý để thay đổi trang phục liên tục mỗi địa điểm để chụp ảnh.</span>
+            </li>
+            <li class="flex items-start">
+              <span class="unicode-icon mr-3 text-lg mt-0.5">⏱️</span>
+              <span>Bạn mong muốn một lịch trình du lịch được thiết lập cố định từng phút, thật nhiều địa điểm trải
+                ngheimej và không chừa không gian cho sự ngẫu hứng hay linh hoạt.</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="blueprint" class="py-24 bg-[#FDFBF7]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10 text-center md:text-left">
+        <h2 class="text-4xl font-serif text-[#2C302E] mb-4">Lịch Trình Nền</h2>
+        <p class="text-[#59605D] max-w-2xl mx-auto md:mx-0">
+          Bản đồ cảm xúc và lộ trình tuyến tính của chuyến đi. Mỗi điểm dừng mang một thảm thực vật và nhịp độ riêng
+          biệt. Nhấp vào dải thời gian bên dưới để khám phá linh hồn của từng vùng đất.
+        </p>
+      </div>
+
+      <!-- Chronological Visual Timeline -->
+      <div class="mb-8 bg-white p-4 rounded-2xl shadow-sm border border-[#E5E0D8]">
+        <div class="flex text-xs font-bold text-[#8C6D46] uppercase tracking-wider mb-3 px-2">
+          <span class="w-1/4">25-26/4</span>
+          <span class="w-1/8 flex-1 text-center">27/4</span>
+          <span class="w-1/4 text-center">28-29/4</span>
+          <span class="w-1/8 flex-1 text-center">30/4</span>
+          <span class="w-1/8 flex-1 text-right">1/5</span>
+        </div>
+        <div class="flex w-full h-16 rounded-xl overflow-hidden gap-1" id="timeline-bar">
+          <!-- JS will populate segments here -->
+        </div>
+      </div>
+
+      <!-- Detail & Tempo Chart Layout -->
+      <div class="grid lg:grid-cols-2 gap-8">
+        <!-- Dynamic Vibe Card -->
+        <div id="vibe-card-container"
+          class="rounded-3xl p-8 shadow-lg min-h-[380px] flex flex-col justify-between transition-colors duration-500 vibe-ubud relative overflow-hidden">
+          <!-- JS will populate card content here -->
+        </div>
+
+        <!-- Analytical Tempo Chart -->
+        <div class="bg-white p-8 rounded-3xl shadow-sm border border-[#E5E0D8] flex flex-col justify-between">
+          <div>
+            <h3 class="text-xl font-bold mb-1 text-[#2C302E]">Nhịp độ & Năng lượng</h3>
+            <p class="text-xs text-[#59605D] mb-4">Phân tích cường độ hoạt động qua các ngày (1: Rất chậm/Thư giãn ->
+              10: Rất nhanh/Bùng nổ).</p>
+          </div>
+          <div class="chart-container flex-grow">
+            <canvas id="tempoChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="finance" class="py-24 bg-white border-t border-[#E5E0D8]">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h2 class="text-4xl font-serif text-[#2C302E] mb-6">Tài chính & Vận hành</h2>
+      <p class="text-[#59605D] max-w-2xl mx-auto mb-16">
+        Cơ chế vận hành tài chính được thiết lập dựa trên sự chia sẻ, minh bạch và tôn trọng tuyệt đối tự do cá nhân.
+        Chúng ta nhóm lại để tối ưu nguồn lực, không phải để trói buộc nhau.
+      </p>
+
+      <div class="grid md:grid-cols-3 gap-8 text-left">
+        <div class="p-6 bg-[#F9F7F3] rounded-xl">
+          <div
+            class="w-12 h-12 bg-[#C17767] text-white rounded-full flex items-center justify-center text-2xl unicode-icon mb-4">
+            🤝</div>
+          <h4 class="text-lg font-bold mb-3 text-[#2C302E]">Tối ưu Chi phí Nhóm</h4>
+          <p class="text-sm text-[#59605D] leading-relaxed">
+            Mục đích đi nhóm là để share chi phí di chuyển lớn (ô tô có tài xế chặng dài), bao trọn không gian tàu
+            Jukung lặn biển (Private Boat) và san sẻ các bữa ăn chính để thử nhiều món.
+          </p>
+        </div>
+
+        <div class="p-6 bg-[#F9F7F3] rounded-xl">
+          <div
+            class="w-12 h-12 bg-[#C17767] text-white rounded-full flex items-center justify-center text-2xl unicode-icon mb-4">
+            🏨</div>
+          <h4 class="text-lg font-bold mb-3 text-[#2C302E]">Lưu trú Linh hoạt</h4>
+          <p class="text-sm text-[#59605D] leading-relaxed">
+            Không bắt buộc thuê chung. Bạn tự do chọn phòng theo ngân sách cá nhân. Tuy nhiên, nếu ở cùng homestay hoặc
+            cùng khu vực, việc pickup đi chơi và ra bến tàu sẽ mượt mà hơn.
+          </p>
+        </div>
+
+        <div class="p-6 bg-[#F9F7F3] rounded-xl">
+          <div
+            class="w-12 h-12 bg-[#C17767] text-white rounded-full flex items-center justify-center text-2xl unicode-icon mb-4">
+            📊</div>
+          <h4 class="text-lg font-bold mb-3 text-[#2C302E]">Minh bạch Thực tế</h4>
+          <p class="text-sm text-[#59605D] leading-relaxed">
+            Không có con số "đóng khung" nộp trước. Chi phí chung (thuê xe dài ngày, bao thuyền) sẽ gom bill và chia đều
+            dựa trên chi phí thực tế phát sinh tại thời điểm đó.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="connect" class="py-24 bg-[#2C302E] text-white text-center">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-serif mb-6">Trao đổi thêm?</h2>
+      <p class="text-gray-300 mb-12 leading-relaxed">
+        Nếu bạn cảm thấy phong cách du lịch này hợp gu, hãy thực hiện bước tiếp theo. Tụi mình sẽ "Sync-up" bằng cách
+        show vé máy bay đã chốt trước khi chia sẻ thông tin chi tiết các homestay để bảo đảm an toàn.
+      </p>
+
+      <div class="flex justify-center items-center gap-6 mb-12">
+        <a href="https://wa.me/+84908372168" target="_blank" rel="noopener noreferrer"
+          class="w-16 h-16 bg-[#25D366] rounded-2xl flex items-center justify-center text-3xl cursor-pointer hover:scale-110 transition shadow-lg unicode-icon"
+          title="WhatsApp">📞</a>
+      </div>
+
+      <p class="text-sm text-gray-400 italic">
+        (Click vào icon để trao đổi trực tiếp qua WhatsApp nhé.)
+      </p>
+    </div>
+  </section>
+
+  <footer class="bg-[#1A1C1B] py-6 text-center text-xs text-gray-500">
+    <p>&copy; 2026 Bali - Singapore Expedition. Designed for Independent Souls.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // Redesigned Itinerary Data emphasizing Vibe and reducing dense text
+      const itineraryData = [
+        {
+          id: 'Ubud',
+          date: 'Ngày 1 - 2 (25-26/4)',
+          vibeClass: 'vibe-ubud',
+          colorCode: '#3A5A40',
+          width: '25%',
+          energy: 7,
+          icon: '🌿',
+          tagline: 'Nghệ thuật & Rừng nhiệt đới',
+          fixed: ['Taxi riêng từ sân bay DPS', 'Local homestay trung tâm Ubud Art Market'],
+          open: ['Ẩm thực bản nguyên (Babi Guling)', 'Triết lý IndoVedic tại Usada Bali', 'La cà xe máy ngõ hẻm / Tắm suối tự nhiên']
+        },
+        {
+          id: 'Sidemen',
+          date: 'Ngày 3 (27/4)',
+          vibeClass: 'vibe-sidemen',
+          colorCode: '#A3B18A',
+          width: '12.5%',
+          energy: 3,
+          icon: '🌾',
+          tagline: 'Sống chậm & Thung lũng',
+          fixed: ['Chuyển trạm sang vùng đồng quê', 'Eco-homestay view ruộng bậc thang tĩnh lặng'],
+          open: ['Chạy xe máy băng qua thung lũng sương mù', 'Tham gia workshop làm bạc truyền thống']
+        },
+        {
+          id: 'Lembongan',
+          date: 'Ngày 4 - 5 (28-29/4)',
+          vibeClass: 'vibe-lembongan',
+          colorCode: '#22A39F',
+          width: '25%',
+          energy: 6,
+          icon: '🌊',
+          tagline: 'Sinh quyển Biển nguyên sơ',
+          fixed: ['Nhận đảo (né kẹt xe Nusa Penida)', '2 đêm nạp muối biển'],
+          open: ['Bao trọn thuyền Jukung lặn Manta', 'Chèo Kayak luồn lách rừng ngập mặn', 'Săn hoàng hôn bờ biển vắng']
+        },
+        {
+          id: 'Đất liền (Chưa confirm)',
+          date: 'Ngày 6 (30/4)',
+          vibeClass: 'vibe-seminyak',
+          colorCode: '#512B58',
+          width: '12.5%',
+          energy: 9,
+          icon: '🪩',
+          tagline: 'Trải nghiệm Nightlife',
+          fixed: ['Trở về đất liền, chốt chặn gần sân bay', 'Chuẩn bị thể lực cho đêm dài'],
+          open: ['Local Bar/Pub', 'Tự do chill theo gout riêng']
+        },
+        {
+          id: 'Singapore',
+          date: 'Ngày 7 - 8 (1-2/5)',
+          vibeClass: 'vibe-singapore',
+          colorCode: '#393E46',
+          width: '25%',
+          energy: 10,
+          icon: '🏙️',
+          tagline: 'Siêu đô thị đương đại',
+          fixed: ['Quá cảnh 23 tiếng', 'Lưu trú East/Central sát vách MRT'],
+          open: ['Trải nghiệm ẩm thực đường phố', 'Khám phá nightlife khu Geylang']
+        }
+      ];
+
+      let currentStationIdx = 0;
+      const timelineBar = document.getElementById('timeline-bar');
+      const vibeCardContainer = document.getElementById('vibe-card-container');
+      let tempoChartInstance = null;
+
+      // Render visual timeline bar
+      function renderTimeline() {
+        timelineBar.innerHTML = '';
+        itineraryData.forEach((station, index) => {
+          const segment = document.createElement('div');
+          segment.className = `timeline-segment flex items-center justify-center text-2xl unicode-icon ${index === currentStationIdx ? 'active' : ''}`;
+          segment.style.width = station.width;
+          segment.style.backgroundColor = station.colorCode;
+          segment.innerHTML = `<span class="drop-shadow-md">${station.icon}</span>`;
+          segment.title = station.id;
+          segment.onclick = () => {
+            currentStationIdx = index;
+            updateUI();
+          };
+          timelineBar.appendChild(segment);
+        });
+      }
+
+      // Render Dynamic Vibe Card
+      function renderVibeCard() {
+        const data = itineraryData[currentStationIdx];
+
+        // Clear previous vibe classes
+        vibeCardContainer.className = `rounded-3xl p-8 shadow-lg min-h-[380px] flex flex-col justify-between transition-colors duration-500 relative overflow-hidden ${data.vibeClass}`;
+
+        // Construct bullet points
+        const fixedHTML = data.fixed.map(item => `<li class="flex items-start mb-2"><span class="mr-2 opacity-80">📌</span><span>${item}</span></li>`).join('');
+        const openHTML = data.open.map(item => `<li class="flex items-start mb-2"><span class="mr-2 opacity-80">✨</span><span>${item}</span></li>`).join('');
+
+        vibeCardContainer.innerHTML = `
+                    <div class="absolute -right-6 -top-6 text-[120px] opacity-10 unicode-icon pointer-events-none">${data.icon}</div>
+                    <div class="relative z-10 fade-in">
+                        <div class="text-sm font-bold uppercase tracking-widest opacity-80 mb-1">${data.date}</div>
+                        <h3 class="text-4xl font-serif mb-2">${data.id}</h3>
+                        <p class="text-lg italic opacity-90 mb-8 border-b border-white/20 pb-4 inline-block">${data.tagline}</p>
+                        
+                        <div class="grid sm:grid-cols-2 gap-6 text-sm">
+                            <div>
+                                <h4 class="font-bold uppercase tracking-wider mb-3 opacity-70 border-b border-white/20 pb-1">Cố định</h4>
+                                <ul>${fixedHTML}</ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold uppercase tracking-wider mb-3 opacity-70 border-b border-white/20 pb-1">Tùy biến</h4>
+                                <ul>${openHTML}</ul>
+                            </div>
+                        </div>
+                    </div>
+                `;
+      }
+
+      // Init and Update Tempo Line Chart
+      function initTempoChart() {
+        Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+        Chart.defaults.color = "#59605D";
+
+        const ctxTempo = document.getElementById('tempoChart').getContext('2d');
+
+        const gradient = ctxTempo.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(193, 119, 103, 0.4)');
+        gradient.addColorStop(1, 'rgba(193, 119, 103, 0.0)');
+
+        tempoChartInstance = new Chart(ctxTempo, {
+          type: 'line',
+          data: {
+            labels: itineraryData.map(d => d.id),
+            datasets: [{
+              label: 'Cường độ Năng lượng',
+              data: itineraryData.map(d => d.energy),
+              borderColor: '#C17767',
+              backgroundColor: gradient,
+              borderWidth: 3,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: itineraryData.map(d => d.colorCode),
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 8
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                min: 0,
+                max: 10,
+                ticks: { stepSize: 2, display: false },
+                grid: { color: 'rgba(229, 224, 216, 0.5)', borderDash: [5, 5] },
+                border: { display: false }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { font: { weight: '600', size: 11 } }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(44, 48, 46, 0.9)',
+                titleFont: { size: 14, family: "'Playfair Display', serif" },
+                padding: 12,
+                callbacks: {
+                  label: function (context) {
+                    return ' Nhịp độ: ' + context.raw + '/10';
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      function updateTempoChartPoint() {
+        if (tempoChartInstance) {
+          // Highlight the current point by increasing its radius
+          const radii = itineraryData.map((_, i) => i === currentStationIdx ? 10 : 5);
+          const borderWs = itineraryData.map((_, i) => i === currentStationIdx ? 4 : 2);
+          tempoChartInstance.data.datasets[0].pointRadius = radii;
+          tempoChartInstance.data.datasets[0].pointBorderWidth = borderWs;
+          tempoChartInstance.update();
+        }
+      }
+
+      function updateUI() {
+        renderTimeline();
+        renderVibeCard();
+        updateTempoChartPoint();
+      }
+
+      // Initialization
+      initTempoChart();
+      updateUI();
+
+      // Smooth scrolling
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>
