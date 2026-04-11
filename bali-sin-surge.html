@@ -1,0 +1,1459 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bali & Singapore 2026 · T&N Expedition</title>
+  <meta name="description"
+    content="Một hành trình thiết kế riêng cho những tâm hồn tự do: Lẩn khuất trong ngõ hẻm Ubud, snorkel ở Lembongan và chill cùng âm nhạc bản địa.">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://bali-sin-travel-2026.surge.sh/">
+  <meta property="og:title" content="Bali & Singapore 2026 · T&N Expedition">
+  <meta property="og:description"
+    content="Một hành trình thiết kế riêng cho những tâm hồn tự do: Ubud, Lembongan và Singapore.">
+  <meta property="og:image" content="https://bali-sin-travel-2026.surge.sh/og-image.webp">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://bali-sin-travel-2026.surge.sh/">
+  <meta property="twitter:title" content="Bali & Singapore 2026 · T&N Expedition">
+  <meta property="twitter:description" content="Một hành trình thiết kế riêng cho những tâm hồn tự do.">
+  <meta property="twitter:image" content="https://bali-sin-travel-2026.surge.sh/og-image.webp">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@400;600&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --cream: #F7F3EC;
+      --warm-white: #FDFAF5;
+      --terracotta: #C96442;
+      --terra-light: #F2D5C8;
+      --terra-dark: #8B3E25;
+      --sage: #6B9E78;
+      --sage-light: #D0E8D6;
+      --forest: #1E3D2F;
+      /* deep tropical green — replaces charcoal for sections */
+      --forest-mid: #2D5A3D;
+      /* mid-tone forest green */
+      --forest-light: #3A7050;
+      /* lighter green for accents on dark bg */
+      --steel: #2E4A6B;
+      --charcoal: #1E1E1E;
+      /* kept only for footer/type */
+      --ink: #2C2C2C;
+      --muted: #7A7570;
+      --sand: #E8E0D0;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      line-height: 1.7;
+    }
+
+    /* Grain texture overlay */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.03;
+    }
+
+    .serif {
+      font-family: 'Playfair Display', serif;
+    }
+
+    .handwritten {
+      font-family: 'Caveat', cursive;
+    }
+
+    /* ───────────────── NAV ───────────────── */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 500;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s, padding 0.4s, box-shadow 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(247, 243, 236, 0.95);
+      backdrop-filter: blur(12px);
+      padding: 0.85rem 2.5rem;
+      box-shadow: 0 1px 0 var(--sand);
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo span {
+      color: var(--terracotta);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.25rem;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--terracotta);
+    }
+
+    .nav-cta {
+      background: var(--forest) !important;
+      color: white !important;
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      letter-spacing: 0.04em !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--terracotta) !important;
+      color: white !important;
+    }
+
+    /* ───────────────── HERO ───────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 55% 45%;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      #hero {
+        grid-template-columns: 1fr;
+        min-height: auto;
+      }
+    }
+
+    .hero-left {
+      padding: 9rem 3rem 5rem 4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      position: relative;
+      background: var(--cream);
+    }
+
+    .hero-right {
+      background: var(--forest);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 9rem 2.5rem 5rem;
+    }
+
+    .hero-right-bg {
+      position: absolute;
+      inset: 0;
+      background: url('hero-bg.png') center/cover no-repeat;
+      opacity: 0.35;
+      transition: transform 8s ease;
+    }
+
+    .hero-right:hover .hero-right-bg {
+      transform: scale(1.04);
+    }
+
+    .hero-right-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* Stamp tag */
+    .stamp {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.5rem 1.25rem;
+      border-radius: 100px;
+      background: var(--terracotta);
+      color: white;
+      margin-bottom: 1.75rem;
+      transform: rotate(-1deg);
+      display: inline-block;
+    }
+
+    .stamp-outline {
+      background: transparent;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      color: rgba(255, 255, 255, 0.7);
+      transform: rotate(0.5deg);
+    }
+
+    .hero-h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.8rem, 8vw, 7rem);
+      font-weight: 700;
+      line-height: 0.92;
+      letter-spacing: -0.03em;
+      color: var(--charcoal);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero-h1 em {
+      font-style: italic;
+      color: var(--terracotta);
+    }
+
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 480px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--sand);
+      padding-top: 2rem;
+      margin-top: auto;
+    }
+
+    .stat {
+      flex: 1;
+      padding-right: 1.5rem;
+      border-right: 1px solid var(--sand);
+      margin-right: 1.5rem;
+    }
+
+    .stat:last-child {
+      border-right: none;
+      margin-right: 0;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      color: var(--charcoal);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 2.25rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      padding: 1rem 2.25rem;
+      border-radius: 100px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-dark {
+      background: var(--forest);
+      color: white;
+    }
+
+    .btn-dark:hover {
+      background: var(--terracotta);
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid rgba(0, 0, 0, 0.15);
+      color: var(--charcoal);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--terracotta);
+      color: var(--terracotta);
+    }
+
+    /* Right side highlight cards */
+    .hero-highlights {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      margin-top: 3rem;
+    }
+
+    .highlight-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 1rem;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      transition: background 0.3s;
+    }
+
+    .highlight-card:hover {
+      background: rgba(255, 255, 255, 0.13);
+    }
+
+    .highlight-icon {
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .highlight-info .h-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      color: white;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .highlight-info .h-sub {
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 2px;
+    }
+
+    /* Horizontal route strip */
+    .route-strip {
+      background: var(--forest);
+      padding: 1.5rem 4rem;
+      display: flex;
+      align-items: center;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .route-strip::-webkit-scrollbar {
+      display: none;
+    }
+
+    .route-node {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      white-space: nowrap;
+    }
+
+    .route-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--terracotta);
+      flex-shrink: 0;
+    }
+
+    .route-place {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.45);
+    }
+
+    .route-place.active {
+      color: white;
+    }
+
+    .route-line {
+      flex: 1;
+      min-width: 60px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.12);
+      margin: 0 0.5rem;
+      position: relative;
+    }
+
+    .route-line::after {
+      content: '→';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.2);
+      background: var(--forest);
+      padding: 0 4px;
+    }
+
+    /* ───────────────── SECTIONS ───────────────── */
+    section {
+      padding: 6rem 2rem;
+    }
+
+    .container {
+      max-width: 1140px;
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.75rem;
+      display: block;
+    }
+
+    .section-h {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4.5vw, 3.25rem);
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-sub {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 600px;
+    }
+
+    /* ───────────────── VIBE SECTION ───────────────── */
+    #vibe {
+      background: var(--warm-white);
+    }
+
+    .vibe-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .vibe-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .vibe-card {
+      border-radius: 1.75rem;
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vibe-yes {
+      background: var(--sage-light);
+    }
+
+    .vibe-no {
+      background: var(--terra-light);
+    }
+
+    .vibe-card-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      padding: 0.6rem 1.5rem;
+      border-radius: 100px;
+      display: inline-block;
+      margin-bottom: 2rem;
+    }
+
+    .vibe-yes .vibe-card-label {
+      background: var(--sage);
+      color: white;
+    }
+
+    .vibe-no .vibe-card-label {
+      background: var(--terracotta);
+      color: white;
+    }
+
+    .vibe-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .vibe-emoji {
+      font-size: 1.3rem;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .vibe-text {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: #333;
+    }
+
+    .vibe-text strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* Handwritten accent */
+    .handwritten-accent {
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      color: var(--muted);
+      margin-top: 0.3rem;
+      display: block;
+    }
+
+    /* ───────────────── DESTINATIONS / BLUEPRINT ───────────────── */
+    #destinations {
+      background: var(--forest);
+      padding: 5rem 0;
+    }
+
+    .dest-header {
+      padding: 0 4rem 3rem;
+    }
+
+    .dest-header .eyebrow {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .dest-header .section-h {
+      color: white;
+    }
+
+    .dest-header .section-sub {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Proportional timeline bar */
+    .timeline-bar-wrap {
+      padding: 0 4rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .timeline-dates {
+      display: flex;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.35);
+      margin-bottom: 0.75rem;
+      padding: 0 2px;
+    }
+
+    .timeline-dates span {
+      flex: 1;
+    }
+
+    .timeline-dates span:nth-child(2) {
+      text-align: center;
+    }
+
+    .timeline-dates span:nth-child(4) {
+      text-align: center;
+    }
+
+    .timeline-dates span:last-child {
+      text-align: right;
+    }
+
+    .timeline-bar {
+      display: flex;
+      height: 3.5rem;
+      border-radius: 1rem;
+      overflow: hidden;
+      gap: 3px;
+    }
+
+    .timeline-segment {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      filter: grayscale(30%);
+      opacity: 0.75;
+      border-radius: 0;
+    }
+
+    .timeline-segment:hover {
+      filter: grayscale(0%);
+      opacity: 1;
+      transform: scaleY(1.08);
+    }
+
+    .timeline-segment.active {
+      filter: grayscale(0%);
+      opacity: 1;
+      transform: scaleY(1.12);
+      border: 2px solid white;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+    }
+
+    /* Vibe card grid */
+    .blueprint-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      padding: 0 4rem;
+    }
+
+    @media (max-width: 900px) {
+      .blueprint-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1.5rem;
+      }
+
+      .timeline-bar-wrap {
+        padding: 0 1.5rem;
+      }
+
+      .dest-header {
+        padding: 0 1.5rem 2.5rem;
+      }
+    }
+
+    /* Dynamic Vibe Backgrounds */
+    .vibe-ubud {
+      background: linear-gradient(135deg, #1E3D2F, #3A7050);
+      color: white;
+    }
+
+    .vibe-sidemen {
+      background: linear-gradient(135deg, #5E7244, #8FA66E);
+      color: #1A1F16;
+    }
+
+    .vibe-lembongan {
+      background: linear-gradient(135deg, #1A5F7A, #22A39F);
+      color: white;
+    }
+
+    .vibe-seminyak {
+      background: linear-gradient(135deg, #3B1F3D, #5C3060);
+      color: white;
+    }
+
+    .vibe-singapore {
+      background: linear-gradient(135deg, #1B3A6E, #2D6BA8);
+      color: white;
+    }
+
+    .blueprint-vibe-card {
+      border-radius: 2rem;
+      padding: 2.5rem;
+      min-height: 380px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.5s ease;
+    }
+
+    .blueprint-chart-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 2rem;
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .blueprint-chart-card h3 {
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .blueprint-chart-card p {
+      font-size: 0.875rem;
+      color: rgba(255, 255, 255, 0.45);
+      margin-bottom: 1.25rem;
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      flex-grow: 1;
+    }
+
+    /* ───────────────── FINANCE ───────────────── */
+    #finance {
+      background: var(--cream);
+    }
+
+    .finance-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .finance-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .fin-card {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      border: 1px solid var(--sand);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fin-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.35s ease;
+    }
+
+    .fin-card:nth-child(1)::before {
+      background: var(--terracotta);
+    }
+
+    .fin-card:nth-child(2)::before {
+      background: var(--sage);
+    }
+
+    .fin-card:nth-child(3)::before {
+      background: var(--forest-light);
+    }
+
+    .fin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.07);
+    }
+
+    .fin-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .fin-icon {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.85rem;
+      background: var(--sage-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .fin-title {
+      font-weight: 700;
+      font-size: 1.2rem;
+      margin-bottom: 0.7rem;
+    }
+
+    .fin-body {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ───────────────── CONNECT ───────────────── */
+    #connect {
+      background: var(--forest);
+      color: white;
+      text-align: center;
+    }
+
+    .connect-inner {
+      max-width: 620px;
+      margin: 0 auto;
+    }
+
+    .connect-inner .eyebrow {
+      color: rgba(255, 255, 255, 0.35);
+    }
+
+    .connect-inner .section-h {
+      color: white;
+    }
+
+    .connect-desc {
+      font-size: 1.1rem;
+      color: rgba(255, 255, 255, 0.55);
+      line-height: 1.75;
+      margin-bottom: 3rem;
+    }
+
+    .wa-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: #25D366;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 1.1rem 2.75rem;
+      border-radius: 100px;
+      box-shadow: 0 12px 35px rgba(37, 211, 102, 0.3);
+      transition: all 0.3s ease;
+      letter-spacing: 0.02em;
+    }
+
+    .wa-btn:hover {
+      background: #1ea852;
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(37, 211, 102, 0.4);
+    }
+
+    .connect-note {
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-style: italic;
+    }
+
+    /* ───────────────── FOOTER ───────────────── */
+    footer {
+      background: #0F1F18;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      color: rgba(255, 255, 255, 0.18);
+      text-transform: uppercase;
+    }
+
+    /* ───────────────── REVEAL ───────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.75s ease, transform 0.75s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-d1 {
+      transition-delay: 0.1s;
+    }
+
+    .reveal-d2 {
+      transition-delay: 0.2s;
+    }
+
+    .reveal-d3 {
+      transition-delay: 0.3s;
+    }
+
+    .fade-in {
+      animation: fadeSlide 0.45s ease forwards;
+    }
+
+    @keyframes fadeSlide {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ───────────────── MOBILE ───────────────── */
+    @media (max-width: 768px) {
+      section {
+        padding: 4rem 1.25rem;
+      }
+
+      .hero-left {
+        padding: 7rem 1.5rem 3.5rem;
+      }
+
+      .hero-right {
+        min-height: 55vw;
+        padding: 2rem 1.5rem;
+      }
+
+      .mob-hide {
+        display: none !important;
+      }
+
+      .route-strip {
+        padding: 1.25rem 1.5rem;
+      }
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid var(--sand);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ───── NAV ───── -->
+  <nav id="main-nav">
+    <a href="#hero" class="nav-logo">T<span>&</span>N.2026</a>
+    <div class="nav-links">
+      <a href="#vibe">Vibe</a>
+      <a href="#destinations">Lộ Trình</a>
+      <a href="#finance">Vận Hành</a>
+      <a href="#connect" class="nav-cta">Kết Nối</a>
+    </div>
+  </nav>
+
+  <!-- ───── HERO ───── -->
+  <section id="hero">
+    <div class="hero-left">
+      <span class="stamp">+ Hello Travel Mates!!</span>
+
+      <h1 class="hero-h1">
+        Bali<br>
+        <em>& Singa-<br>pore</em>
+      </h1>
+
+      <p class="hero-desc">
+        Một hành trình thiết kế riêng cho những tâm hồn tự do: Lẩn khuất trong ngõ hẻm Ubud, snorkel ở Lembongan/Penida
+        và chill cùng âm nhạc bản địa. Không resort hào nhoáng, không check-in rập khuôn.
+      </p>
+
+      <div class="hero-btns">
+        <a href="#vibe" class="btn btn-dark">Kiểm tra độ hợp cạ →</a>
+        <a href="#destinations" class="btn btn-outline">Xem hành trình</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num serif">8</div>
+          <div class="stat-label">Ngày · 7 Đêm</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num serif">4</div>
+          <div class="stat-label">Người lý tưởng</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num serif">5</div>
+          <div class="stat-label">Điểm đến</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-right-bg"></div>
+      <div class="hero-right-content">
+        <span class="stamp stamp-outline">Nguyên bản & Đương đại</span>
+
+        <div class="hero-highlights">
+          <div class="highlight-card reveal">
+            <div class="highlight-icon">⏳</div>
+            <div class="highlight-info">
+              <div class="h-title">8D7N · 25/04 – 02/05/2026</div>
+              <div class="h-sub">Khởi hành từ TP.HCM · Kết thúc tại Singapore</div>
+            </div>
+          </div>
+          <div class="highlight-card reveal reveal-d1">
+            <div class="highlight-icon">👥</div>
+            <div class="highlight-info">
+              <div class="h-title">Lý tưởng Nhóm 4 Người</div>
+              <div class="h-sub">Đã có 2 nữ — cần thêm 1–2 bạn đồng hành</div>
+            </div>
+          </div>
+          <div class="highlight-card reveal reveal-d2">
+            <div class="highlight-icon">🛵</div>
+            <div class="highlight-info">
+              <div class="h-title">Di chuyển Linh hoạt</div>
+              <div class="h-sub">Ô tô chặng dài · Xe máy tự lái luồn lách ngõ hẻm</div>
+            </div>
+          </div>
+          <div class="highlight-card reveal reveal-d3">
+            <div class="highlight-icon">✨</div>
+            <div class="highlight-info">
+              <div class="h-title">Vibe Chuyến đi</div>
+              <div class="h-sub">Văn hóa bản địa · Ẩm thực · Nightlife đương đại</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── ROUTE STRIP ───── -->
+  <div class="route-strip">
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place active">TP.HCM</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place">Ubud</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place">Sidemen</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place">Lembongan</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place">Seminyak</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place">Singapore</span>
+    </div>
+    <div class="route-line"></div>
+    <div class="route-node">
+      <div class="route-dot"></div><span class="route-place active">Home ✈</span>
+    </div>
+  </div>
+
+  <!-- ───── VIBE CHECK ───── -->
+  <section id="vibe">
+    <div class="container">
+      <span class="eyebrow reveal">Trước khi bắt đầu</span>
+      <h2 class="section-h reveal">"Vibe Check"<br>Tìm kiếm sự đồng điệu</h2>
+      <p class="section-sub reveal">
+        Phần này giúp chúng ta xác định sự tương thích về phong cách du lịch. Chuyến đi nhóm chỉ thành công khi các
+        thành viên chia sẻ chung một hệ giá trị trải nghiệm, từ cách đóng gói hành lý đến cách tận hưởng một đêm tại
+        thành phố lạ.
+      </p>
+
+      <div class="vibe-layout">
+        <div class="vibe-card vibe-yes reveal">
+          <span class="vibe-card-label">✔ Tuyệt vời nếu bạn thích</span>
+
+          <div class="vibe-item">
+            <span class="vibe-emoji">🎒</span>
+            <div class="vibe-text"><strong>Hành trang tinh gọn:</strong> Trải nghiệm 8 ngày chỉ với 1 vali xách tay Size
+              S hoặc Balo để linh hoạt di chuyển lên xuống tàu xe.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">🌶️</span>
+            <div class="vibe-text"><strong>Đam mê ăn uống:</strong> Thích la cà các Warung địa phương, tìm kiếm hương vị
+              gốc đậm đà, và săn tìm ẩm thực & Michelin đường phố.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">🎨</span>
+            <div class="vibe-text"><strong>Nghệ thuật & Văn hóa:</strong> Dành thời gian tại các local stores, coffee,
+              khám phá spiritual life của người dân Bali.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">🛵</span>
+            <div class="vibe-text"><strong>Giao thoa Đời sống:</strong> Khám phá nhịp sống địa phương, âm nhạc bản địa,
+              ưu tiên chiều sâu trải nghiệm thực tế thay vì chỉ chụp ảnh check-in.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">🤝</span>
+            <div class="vibe-text"><strong>Tự do & Chia sẻ:</strong> Tôn trọng tự do cá nhân, nhưng luôn cởi mở san sẻ
+              các chuyến di chuyển lớn hoặc cùng nhau thử nhiều món ăn.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">📸</span>
+            <div class="vibe-text"><strong>Moments Capture:</strong> Trân trọng việc lưu giữ kỷ niệm nhưng ưu tiên tận
+              hưởng không gian hiện tại hơn là chụp ảnh hàng giờ.</div>
+          </div>
+        </div>
+
+        <div class="vibe-card vibe-no reveal reveal-d1">
+          <span class="vibe-card-label">✖ Có thể lệch tần số nếu</span>
+
+          <div class="vibe-item">
+            <span class="vibe-emoji">🧳</span>
+            <div class="vibe-text">Bạn cần mang theo nhiều hành lý để thay đổi trang phục liên tục mỗi địa điểm để chụp
+              ảnh.</div>
+          </div>
+          <div class="vibe-item">
+            <span class="vibe-emoji">⏱️</span>
+            <div class="vibe-text">Bạn mong muốn một lịch trình du lịch được thiết lập cố định từng phút, thật nhiều địa
+              điểm trải nghiệm và không chừa không gian cho sự ngẫu hứng hay linh hoạt.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── DESTINATIONS / BLUEPRINT ───── -->
+  <section id="destinations" style="padding-bottom: 6rem;">
+    <div class="dest-header reveal">
+      <span class="eyebrow">Lộ Trình</span>
+      <h2 class="section-h">Lịch Trình Nền</h2>
+      <p class="section-sub">
+        Bản đồ cảm xúc và lộ trình tuyến tính của chuyến đi. Mỗi điểm dừng mang một thảm thực vật và nhịp độ riêng biệt.
+        Nhấp vào dải thời gian để khám phá linh hồn từng vùng đất.
+      </p>
+    </div>
+
+    <!-- Proportional Timeline Bar -->
+    <div class="timeline-bar-wrap">
+      <div class="timeline-dates">
+        <span>25–26/4</span>
+        <span>27/4</span>
+        <span>28–29/4</span>
+        <span>30/4</span>
+        <span>1–2/5</span>
+      </div>
+      <div class="timeline-bar" id="timeline-bar">
+        <!-- JS populates -->
+      </div>
+    </div>
+
+    <!-- Blueprint Grid: Vibe Card + Tempo Chart -->
+    <div class="blueprint-grid">
+      <div class="blueprint-vibe-card vibe-ubud" id="vibe-card-container">
+        <!-- JS populates -->
+      </div>
+      <div class="blueprint-chart-card">
+        <div>
+          <h3>Nhịp độ & Năng lượng</h3>
+          <p>Cường độ hoạt động qua từng điểm dừng (1 = Chậm / Thư giãn → 10 = Bùng nổ).</p>
+        </div>
+        <div class="chart-container">
+          <canvas id="tempoChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── FINANCE ───── -->
+  <section id="finance">
+    <div class="container">
+      <span class="eyebrow reveal">Vận Hành</span>
+      <h2 class="section-h reveal">Tài chính & Vận hành</h2>
+      <p class="section-sub reveal">
+        Cơ chế vận hành tài chính được thiết lập dựa trên sự chia sẻ, minh bạch và tôn trọng tuyệt đối tự do cá nhân.
+        Chúng ta nhóm lại để tối ưu nguồn lực, không phải để trói buộc nhau.
+      </p>
+
+      <div class="finance-grid">
+        <div class="fin-card reveal">
+          <div class="fin-icon">🤝</div>
+          <div class="fin-title">Tối ưu Chi phí Nhóm</div>
+          <div class="fin-body">Mục đích đi nhóm là để share chi phí di chuyển lớn (ô tô có tài xế chặng dài), bao trọn
+            không gian tàu Jukung lặn biển (Private Boat) và san sẻ các bữa ăn chính để thử nhiều món.</div>
+        </div>
+        <div class="fin-card reveal reveal-d1">
+          <div class="fin-icon">🏨</div>
+          <div class="fin-title">Lưu trú Linh hoạt</div>
+          <div class="fin-body">Không bắt buộc thuê chung. Bạn tự do chọn phòng theo ngân sách cá nhân. Tuy nhiên, nếu ở
+            cùng homestay hoặc cùng khu vực, việc pickup đi chơi và ra bến tàu sẽ mượt mà hơn.</div>
+        </div>
+        <div class="fin-card reveal reveal-d2">
+          <div class="fin-icon">📊</div>
+          <div class="fin-title">Minh bạch Thực tế</div>
+          <div class="fin-body">Không có con số "đóng khung" nộp trước. Chi phí chung (thuê xe dài ngày, bao thuyền) sẽ
+            gom bill và chia đều dựa trên chi phí thực tế phát sinh tại thời điểm đó.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───── CONNECT ───── -->
+  <section id="connect">
+    <div class="connect-inner">
+      <span class="eyebrow reveal">Bước tiếp theo</span>
+      <h2 class="section-h reveal">Trao đổi thêm?</h2>
+      <p class="connect-desc reveal">
+        Nếu bạn cảm thấy phong cách du lịch này hợp gu, hãy thực hiện bước tiếp theo. Tụi mình sẽ "Sync-up" bằng cách
+        show vé máy bay đã chốt trước khi chia sẻ thông tin chi tiết các homestay để bảo đảm an toàn.
+      </p>
+      <a href="https://wa.me/+84908372168" target="_blank" rel="noopener noreferrer" class="wa-btn reveal">
+        <span>📞</span> WhatsApp Me
+      </a>
+      <p class="connect-note reveal">Click vào nút để trao đổi trực tiếp qua WhatsApp nhé.</p>
+    </div>
+  </section>
+
+  <!-- ───── FOOTER ───── -->
+  <footer>
+    <p>© 2026 Bali – Singapore Expedition · T&N · Designed for Independent Souls</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // ── NAV SCROLL STATE ──
+      const nav = document.getElementById('main-nav');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('scrolled', window.scrollY > 50);
+      });
+
+      // ── SCROLL REVEAL ──
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+      }, { threshold: 0.1 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      // ── SMOOTH SCROLL ──
+      document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+          e.preventDefault();
+          const target = document.querySelector(a.getAttribute('href'));
+          if (target) target.scrollIntoView({ behavior: 'smooth' });
+        });
+      });
+
+      // ── ITINERARY DATA ──
+      const itineraryData = [
+        {
+          id: 'Ubud',
+          date: 'Ngày 1 – 2 (25–26/4)',
+          vibeClass: 'vibe-ubud',
+          colorCode: '#3A7050',
+          width: '25%',
+          energy: 7,
+          icon: '🌿',
+          tagline: 'Nghệ thuật & Rừng nhiệt đới',
+          fixed: ['Taxi riêng từ sân bay DPS', 'Local homestay trung tâm Ubud Art Market'],
+          open: ['Ẩm thực bản nguyên (Babi Guling)', 'Triết lý IndoVedic tại Usada Bali', 'La cà xe máy ngõ hẻm / Tắm suối tự nhiên']
+        },
+        {
+          id: 'Sidemen',
+          date: 'Ngày 3 (27/4)',
+          vibeClass: 'vibe-sidemen',
+          colorCode: '#8FA66E',
+          width: '12.5%',
+          energy: 3,
+          icon: '🌾',
+          tagline: 'Sống chậm & Thung lũng',
+          fixed: ['Chuyển trạm sang vùng đồng quê', 'Eco-homestay view ruộng bậc thang tĩnh lặng'],
+          open: ['Chạy xe máy băng qua thung lũng sương mù', 'Workshop làm bạc truyền thống']
+        },
+        {
+          id: 'Lembongan',
+          date: 'Ngày 4 – 5 (28–29/4)',
+          vibeClass: 'vibe-lembongan',
+          colorCode: '#22A39F',
+          width: '25%',
+          energy: 6,
+          icon: '🌊',
+          tagline: 'Sinh quyển Biển nguyên sơ',
+          fixed: ['Nhận đảo (né kẹt xe Nusa Penida)', '2 đêm nạp muối biển'],
+          open: ['Bao trọn thuyền Jukung — lặn Manta', 'Chèo Kayak luồn lách rừng ngập mặn', 'Săn hoàng hôn bờ biển vắng']
+        },
+        {
+          id: 'Đất liền',
+          date: 'Ngày 6 (30/4)',
+          vibeClass: 'vibe-seminyak',
+          colorCode: '#5C3060',
+          width: '12.5%',
+          energy: 9,
+          icon: '🪩',
+          tagline: 'Trải nghiệm Nightlife Bali',
+          fixed: ['Về đất liền, chốt chặn gần sân bay', 'Chuẩn bị thể lực cho đêm dài'],
+          open: ['Local Bar / Pub', 'Tự do chill theo gout riêng']
+        },
+        {
+          id: 'Singapore',
+          date: 'Ngày 7 – 8 (1–2/5)',
+          vibeClass: 'vibe-singapore',
+          colorCode: '#2D6BA8',
+          width: '25%',
+          energy: 10,
+          icon: '🏙️',
+          tagline: 'Siêu đô thị đương đại',
+          fixed: ['Quá cảnh 23 tiếng', 'Lưu trú East/Central sát vách MRT'],
+          open: ['Ẩm thực đường phố & Michelin Bib Gourmand', 'Khám phá nightlife khu Geylang / Chinatown']
+        }
+      ];
+
+      let currentIdx = 0;
+      const timelineBar = document.getElementById('timeline-bar');
+      const vibeCard = document.getElementById('vibe-card-container');
+      let tempoChart = null;
+
+      // ── RENDER TIMELINE ──
+      function renderTimeline() {
+        timelineBar.innerHTML = '';
+        itineraryData.forEach((s, i) => {
+          const seg = document.createElement('div');
+          seg.className = `timeline-segment ${i === currentIdx ? 'active' : ''}`;
+          seg.style.width = s.width;
+          seg.style.backgroundColor = s.colorCode;
+          seg.title = s.id;
+          seg.innerHTML = `<span>${s.icon}</span>`;
+          seg.onclick = () => { currentIdx = i; updateUI(); };
+          timelineBar.appendChild(seg);
+        });
+      }
+
+      // ── RENDER VIBE CARD ──
+      function renderVibeCard() {
+        const d = itineraryData[currentIdx];
+        vibeCard.className = `blueprint-vibe-card ${d.vibeClass}`;
+        const fixedHTML = d.fixed.map(x => `<li style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.6rem;"><span>📌</span><span>${x}</span></li>`).join('');
+        const openHTML = d.open.map(x => `<li style="display:flex;align-items:flex-start;gap:.5rem;margin-bottom:.6rem;"><span>✨</span><span>${x}</span></li>`).join('');
+
+        vibeCard.innerHTML = `
+            <div style="position:absolute;right:-1rem;top:-1rem;font-size:7rem;opacity:0.08;pointer-events:none;">${d.icon}</div>
+            <div class="fade-in" style="position:relative;z-index:2;">
+                <div style="font-size:.85rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.7;margin-bottom:.4rem;">${d.date}</div>
+                <h3 style="font-family:'Playfair Display',serif;font-size:2.5rem;line-height:1.05;margin-bottom:.4rem;">${d.id}</h3>
+                <p style="font-size:1.1rem;font-style:italic;opacity:.85;margin-bottom:1.75rem;padding-bottom:1rem;border-bottom:1px solid rgba(255,255,255,0.2);">${d.tagline}</p>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;font-size:1rem;line-height:1.6;">
+                    <div>
+                        <div style="font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.6;margin-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:.4rem;">Cố định</div>
+                        <ul style="list-style:none;">${fixedHTML}</ul>
+                    </div>
+                    <div>
+                        <div style="font-size:.75rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;opacity:.6;margin-bottom:.75rem;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:.4rem;">Tùy biến</div>
+                        <ul style="list-style:none;">${openHTML}</ul>
+                    </div>
+                </div>
+            </div>
+        `;
+      }
+
+      // ── INIT TEMPO CHART ──
+      function initTempoChart() {
+        const ctx = document.getElementById('tempoChart').getContext('2d');
+        const grad = ctx.createLinearGradient(0, 0, 0, 250);
+        grad.addColorStop(0, 'rgba(107, 158, 120, 0.5)');
+        grad.addColorStop(1, 'rgba(107, 158, 120, 0.0)');
+
+        tempoChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: itineraryData.map(d => d.id),
+            datasets: [{
+              label: 'Nhịp độ',
+              data: itineraryData.map(d => d.energy),
+              borderColor: '#9DD8B2',
+              backgroundColor: grad,
+              borderWidth: 2.5,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: itineraryData.map(d => d.colorCode),
+              pointBorderColor: '#fff',
+              pointBorderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 9
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                min: 0, max: 10,
+                grid: { color: 'rgba(255,255,255,0.08)', borderDash: [4, 4] },
+                border: { display: false },
+                ticks: { color: 'rgba(255,255,255,0.3)', stepSize: 2 }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { color: 'rgba(255,255,255,0.5)', font: { weight: '600', size: 11 } }
+              }
+            },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: 'rgba(30,61,47,0.95)',
+                titleFont: { family: "'Playfair Display',serif", size: 14 },
+                bodyColor: 'rgba(255,255,255,0.7)',
+                padding: 12,
+                callbacks: { label: ctx => ` Nhịp độ: ${ctx.raw}/10` }
+              }
+            }
+          }
+        });
+      }
+
+      function updateChartHighlight() {
+        if (!tempoChart) return;
+        tempoChart.data.datasets[0].pointRadius = itineraryData.map((_, i) => i === currentIdx ? 11 : 6);
+        tempoChart.data.datasets[0].pointBorderWidth = itineraryData.map((_, i) => i === currentIdx ? 3 : 2);
+        tempoChart.update();
+      }
+
+      function updateUI() {
+        renderTimeline();
+        renderVibeCard();
+        updateChartHighlight();
+      }
+
+      // ── INIT ──
+      initTempoChart();
+      updateUI();
+    });
+  </script>
+</body>
+
+</html>
